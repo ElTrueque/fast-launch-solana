@@ -1,0 +1,49 @@
+name: Request official Otter remote verification
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'Submit once, or inspect an existing job without another submission'
+        type: choice
+        options: [status, submit]
+        default: status
+        required: true
+      job_id:
+        description: 'Existing public Otter request id (status mode only)'
+        type: string
+        required: false
+permissions:
+  contents: read
+concurrency:
+  group: fast-solana-otter-remote
+  cancel-in-progress: false
+jobs:
+  verify:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - name: Check pinned public plan and request-once logic
+        run: node request-otter-verification.mjs --self-test
+      - name: Check finalized metadata and request or inspect the official build
+        env:
+          MODE: ${{ inputs.mode }}
+          OTTER_JOB_ID: ${{ inputs.job_id }}
+          SOLANA_RPC_URL: ${{ secrets.SOLANA_RPC_URL }}
+          OTTER_MAX_POLLS: '12'
+        run: node request-otter-verification.mjs "$MODE"
+      - name: Preserve public verification evidence
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: fast-solana-otter-remote-${{ github.run_id }}
+          path: otter-remote-evidence/
+          retention-days: 30
+          if-no-files-found: warn
