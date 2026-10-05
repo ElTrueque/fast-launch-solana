@@ -1,0 +1,135 @@
+{
+  "format": "fast-solana-otter-unsigned-v1",
+  "createdAt": "2026-10-05T10:46:46.850Z",
+  "unsignedTransactionBase64": "AQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAQGdh/vEP3zDInDgqYhYaVgroejeLLkNla3K9DPo2oQly61PIoLruRTnAtt4U4lsn35rJcqIOXlUEqI24Mv4/6KnQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwZGb+UhFzL/7K26csOb57yM5bvF9xJrLEObOkAAAAANvpaSWr6/19VnDR/bQWdWwbFGmK/lqYwAmSmFVTSSF6G1v9t+qD3I/5y05/3cthOguirztLwZLq7ihIXm6BISAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAwAJA6CGAQAAAAAABAQBAAUCgAOvr20fDZib7QUAAAAwLjUuMS8AAABodHRwczovL2dpdGh1Yi5jb20vRWxUcnVlcXVlL2Zhc3QtbGF1bmNoLXNvbGFuYSgAAABhZTUyZjczZGNmODU0Y2MxZTdjN2UyYzFmZmEyYWU3MTRhZDBjY2M0CgAAAAwAAAAtLW1vdW50LXBhdGgGAAAAc291cmNlEAAAAC0td29ya3NwYWNlLXBhdGgOAAAAc291cmNlL3Byb2dyYW0OAAAALS1saWJyYXJ5LW5hbWUWAAAAZWxfdHJ1ZXF1ZV9mYXN0X3NvbGFuYQwAAAAtLWJhc2UtaW1hZ2V0AAAAZ2hjci5pby9lbHRydWVxdWUvZmFzdC1sYXVuY2gtc29sYW5hLWJ1aWxkZXJAc2hhMjU2OjlhMmFmZDBhMWE4NDcxNzk5MTliZjBhYjQ4NGY1NGNkYTA4YmY1MzdkODhiZjE4ZDllYTgyMDRmZWFmMzhhOGYGAAAALS1hcmNoAgAAAHYzz5kDGwAAAAA=",
+  "transactionSHA256": "67a9c74f7518874490d5c515ff9af26bbf9bf5b4875d50c95b5ff04dc2962fd3",
+  "neverSigned": true,
+  "submitted": false,
+  "simulationPerformed": false,
+  "program": "BtFP1XpKdZgAiivKJQ6pFr1fuHpeNTHhjyskDbSUtHqj",
+  "programData": "22DKa13W514H2Yt9oc54wKtyyxYwQRQmN6Xb4wKYMNfh",
+  "programSHA256": "7db37174011a0a5736cae8558ddc81ae48dfdb0f58ce62ef0dff182064ed659d",
+  "programBytes": 87160,
+  "authority": "8x7MM5maL2vQPpqeiLWBiPKk6VK4BRZ9qG5jqoP9eta1",
+  "metadataPda": "DCULQHBJbx3PssnPFYTcqZmKJcezmou2yMqhcH9D5VyW",
+  "metadataPdaBump": 255,
+  "operation": "initialize",
+  "repository": "https://github.com/ElTrueque/fast-launch-solana",
+  "sourceCommit": "ae52f73dcf854cc1e7c7e2c1ffa2ae714ad0ccc4",
+  "imageDigest": "ghcr.io/eltrueque/fast-launch-solana-builder@sha256:9a2afd0a1a847179919bf0ab484f54cda08bf537d88bf18d9ea8204feaf38a8f",
+  "buildArguments": [
+    "--mount-path",
+    "source",
+    "--workspace-path",
+    "source/program",
+    "--library-name",
+    "el_trueque_fast_solana",
+    "--base-image",
+    "ghcr.io/eltrueque/fast-launch-solana-builder@sha256:9a2afd0a1a847179919bf0ab484f54cda08bf537d88bf18d9ea8204feaf38a8f",
+    "--arch",
+    "v3"
+  ],
+  "cliVersion": "0.5.1",
+  "cliAssetSHA256": "b101230b26d5f75d17d931e5056d1a6253904f65649abe7bedb7b81dd38df114",
+  "finalizedSlot": 453556449,
+  "deploymentSlot": "453220815",
+  "existingMetadata": null,
+  "existingMetadataAccount": null,
+  "authorityBalanceLamports": 491491619,
+  "newMetadataBytes": 449,
+  "newMetadataRentExemptMinimumLamports": 2931160,
+  "feeEstimateLamports": null,
+  "strictValidation": {
+    "valid": true,
+    "kind": "unsigned-legacy-verification-metadata",
+    "operation": "initialize",
+    "wireBytes": 698,
+    "wireSHA256": "67a9c74f7518874490d5c515ff9af26bbf9bf5b4875d50c95b5ff04dc2962fd3",
+    "messageSHA256": "936caf10bb349b475e844793589cda47f4f9a4b085c63cd5f69278d191e8b929",
+    "payer": "8x7MM5maL2vQPpqeiLWBiPKk6VK4BRZ9qG5jqoP9eta1",
+    "pda": "DCULQHBJbx3PssnPFYTcqZmKJcezmou2yMqhcH9D5VyW",
+    "targetProgram": "BtFP1XpKdZgAiivKJQ6pFr1fuHpeNTHhjyskDbSUtHqj",
+    "accounts": [
+      {
+        "address": "8x7MM5maL2vQPpqeiLWBiPKk6VK4BRZ9qG5jqoP9eta1",
+        "signer": true,
+        "writable": true
+      },
+      {
+        "address": "DCULQHBJbx3PssnPFYTcqZmKJcezmou2yMqhcH9D5VyW",
+        "signer": false,
+        "writable": true
+      },
+      {
+        "address": "11111111111111111111111111111111",
+        "signer": false,
+        "writable": false
+      },
+      {
+        "address": "ComputeBudget111111111111111111111111111111",
+        "signer": false,
+        "writable": false
+      },
+      {
+        "address": "verifycLy8mB96wd9wqq3WDXQwM4oU6r42Th37Db9fC",
+        "signer": false,
+        "writable": false
+      },
+      {
+        "address": "BtFP1XpKdZgAiivKJQ6pFr1fuHpeNTHhjyskDbSUtHqj",
+        "signer": false,
+        "writable": false
+      }
+    ],
+    "signatureCount": 1,
+    "signaturesAllZero": true,
+    "recentBlockhashAllZero": true,
+    "computeUnitPriceMicroLamports": "100000",
+    "metadata": {
+      "version": "0.5.1",
+      "gitUrl": "https://github.com/ElTrueque/fast-launch-solana",
+      "commit": "ae52f73dcf854cc1e7c7e2c1ffa2ae714ad0ccc4",
+      "args": [
+        "--mount-path",
+        "source",
+        "--workspace-path",
+        "source/program",
+        "--library-name",
+        "el_trueque_fast_solana",
+        "--base-image",
+        "ghcr.io/eltrueque/fast-launch-solana-builder@sha256:9a2afd0a1a847179919bf0ab484f54cda08bf537d88bf18d9ea8204feaf38a8f",
+        "--arch",
+        "v3"
+      ],
+      "deployedSlot": "453220815"
+    },
+    "instructions": [
+      {
+        "program": "ComputeBudget111111111111111111111111111111",
+        "accounts": [],
+        "dataHex": "03a086010000000000"
+      },
+      {
+        "program": "verifycLy8mB96wd9wqq3WDXQwM4oU6r42Th37Db9fC",
+        "accounts": [
+          "DCULQHBJbx3PssnPFYTcqZmKJcezmou2yMqhcH9D5VyW",
+          "8x7MM5maL2vQPpqeiLWBiPKk6VK4BRZ9qG5jqoP9eta1",
+          "BtFP1XpKdZgAiivKJQ6pFr1fuHpeNTHhjyskDbSUtHqj",
+          "11111111111111111111111111111111"
+        ],
+        "dataHex": "afaf6d1f0d989bed05000000302e352e312f00000068747470733a2f2f6769746875622e636f6d2f456c547275657175652f666173742d6c61756e63682d736f6c616e6128000000616535326637336463663835346363316537633765326331666661326165373134616430636363340a0000000c0000002d2d6d6f756e742d7061746806000000736f75726365100000002d2d776f726b73706163652d706174680e000000736f757263652f70726f6772616d0e0000002d2d6c6962726172792d6e616d6516000000656c5f747275657175655f666173745f736f6c616e610c0000002d2d626173652d696d61676574000000676863722e696f2f656c747275657175652f666173742d6c61756e63682d736f6c616e612d6275696c646572407368613235363a39613261666430613161383437313739393139626630616234383466353463646130386266353337643838626631386439656138323034666561663338613866060000002d2d61726368020000007633cf99031b00000000"
+      }
+    ],
+    "scope": "Offline structure and expected-value validation only; no chain-state, simulation, fee, signature, or submission claim."
+  },
+  "requiresBeforeSigning": [
+    "Recheck program ELF, authority and PDA",
+    "Simulate and inspect resulting metadata, balances and inner instructions",
+    "Set a fresh blockhash and show RPC fee plus rent delta",
+    "Connect Phantom account equal to the recorded authority; review exact instructions"
+  ],
+  "buildProof": {
+    "workflowRunURL": "https://github.com/ElTrueque/fast-launch-solana/actions/runs/37298685612",
+    "scope": "Workflow must reproduce this public image and source commit before running this exporter"
+  }
+}
