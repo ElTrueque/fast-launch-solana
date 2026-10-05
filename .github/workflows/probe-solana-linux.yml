@@ -33,9 +33,24 @@ jobs:
           echo "b0f7af104adf726fff2a6a09ea2eb2f2d2965c92295f4d7388c08d140e0c2b00  $archive" | sha256sum --check --strict
           mkdir "$RUNNER_TEMP/fast-solana-linux-platform"
           tar -xjf "$archive" -C "$RUNNER_TEMP/fast-solana-linux-platform"
+      - name: Install original Windows distribution target libraries
+        shell: bash
+        run: |
+          set -euo pipefail
+          archive="$RUNNER_TEMP/platform-tools-windows-v1.57.tar.bz2"
+          curl --fail --location --retry 3 --max-time 600 'https://github.com/anza-xyz/platform-tools/releases/download/v1.57/platform-tools-windows-x86_64.tar.bz2' --output "$archive"
+          echo "792bc821f006e2b56aee31640110b449d5dc89f1305f16f24037465ab8cd7d5a  $archive" | sha256sum --check --strict
+          mkdir "$RUNNER_TEMP/fast-solana-original-target"
+          tar -xjf "$archive" -C "$RUNNER_TEMP/fast-solana-original-target" './rust/lib/rustlib/sbpfv3-solana-solana'
+          target="$RUNNER_TEMP/fast-solana-linux-platform/rust/lib/rustlib/sbpfv3-solana-solana"
+          mv "$target" "$RUNNER_TEMP/fast-solana-native-linux-target-backup"
+          cp -a "$RUNNER_TEMP/fast-solana-original-target/rust/lib/rustlib/sbpfv3-solana-solana" "$target"
+      - name: Test diagnostics and validate original target libraries
+        shell: bash
+        run: node reproduce-linux.mjs source "$RUNNER_TEMP/fast-solana-linux-platform" --original-target-sysroot --diagnostics-self-test
       - name: Compile unchanged sources and require exact ELF equality
         shell: bash
-        run: node reproduce-linux.mjs source "$RUNNER_TEMP/fast-solana-linux-platform"
+        run: node reproduce-linux.mjs source "$RUNNER_TEMP/fast-solana-linux-platform" --original-target-sysroot
       - name: Check current mainnet only after exact build match
         env:
           SOLANA_RPC_URL: ${{ secrets.SOLANA_RPC_URL }}
