@@ -1,0 +1,78 @@
+name: Prepare unsigned Otter metadata transaction
+on:
+  workflow_dispatch:
+    inputs:
+      source_commit:
+        description: 'Full source commit that passed the public image build'
+        required: true
+        type: string
+      image_digest:
+        description: 'Public ghcr.io/eltrueque/fast-launch-solana-builder@sha256:... image'
+        required: true
+        type: string
+permissions:
+  contents: read
+jobs:
+  export:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      PROVEN_SOURCE_COMMIT: ${{ inputs.source_commit }}
+      PUBLIC_IMAGE_DIGEST: ${{ inputs.image_digest }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - name: Validate immutable inputs and strict parser
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$PROVEN_SOURCE_COMMIT" =~ ^[a-f0-9]{40}$ ]]
+          [[ "$PUBLIC_IMAGE_DIGEST" =~ ^ghcr\.io/eltrueque/fast-launch-solana-builder@sha256:[a-f0-9]{64}$ ]]
+          node validate-unsigned-pda.mjs --self-test
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.source_commit }}
+          path: proven-source
+          persist-credentials: false
+      - name: Download official pinned verification CLI
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --location --retry 3 --max-time 180 https://github.com/solana-foundation/solana-verifiable-build/releases/download/v0.5.1/solana-verify-0.5.1-linux -o "$RUNNER_TEMP/solana-verify"
+          echo "b101230b26d5f75d17d931e5056d1a6253904f65649abe7bedb7b81dd38df114  $RUNNER_TEMP/solana-verify" | sha256sum --check --strict
+          chmod +x "$RUNNER_TEMP/solana-verify"
+      - name: Prove public image access and exact committed-source build
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir unsigned-pda-evidence
+          docker pull "$PUBLIC_IMAGE_DIGEST"
+          "$RUNNER_TEMP/solana-verify" build "$PWD/proven-source/source" --workspace-path "$PWD/proven-source/source/program" --library-name el_trueque_fast_solana --base-image "$PUBLIC_IMAGE_DIGEST" --arch v3 2>&1 | tee unsigned-pda-evidence/image-proof.log
+          test "$(stat -c '%s' proven-source/source/program/target/deploy/el_trueque_fast_solana.so)" = 87160
+          echo '7db37174011a0a5736cae8558ddc81ae48dfdb0f58ce62ef0dff182064ed659d  proven-source/source/program/target/deploy/el_trueque_fast_solana.so' | sha256sum --check --strict
+      - name: Check finalized deployment and prepare strict unsigned metadata artifact
+        env:
+          SOLANA_RPC_URL: ${{ secrets.SOLANA_RPC_URL }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          export SOLANA_VERIFY_BIN="$RUNNER_TEMP/solana-verify"
+          node export-unsigned-pda.mjs
+      - name: Save unsigned review artifact
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: fast-solana-unsigned-otter-metadata-${{ github.run_id }}
+          include-hidden-files: true
+          retention-days: 30
+          if-no-files-found: warn
+          path: |
+            unsigned-pda-evidence/
+            proven-source/source/.repro/linux-*/result.json
+            proven-source/source/program/target/deploy/reproduction-receipt.json
