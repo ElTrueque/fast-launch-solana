@@ -1,0 +1,17 @@
+[package]
+name = "el-trueque-fast-solana"
+version = "0.1.0"
+edition = "2021"
+publish = false
+[lib]
+crate-type = ["cdylib"]
+[dependencies]
+solana-define-syscall = "=5.0.0"
+pinocchio = { version = "=0.11.2", default-features = false, features = ["cpi", "copy"] }
+[profile.release]
+panic = "abort"
+overflow-checks = true
+lto = "fat"
+codegen-units = 1
+[lints.rust]
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(target_os, values("solana"))'] }

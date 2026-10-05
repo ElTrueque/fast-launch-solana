@@ -1,0 +1,4 @@
+.repro/
+program/target/
+platform-tools/
+*.tar.bz2

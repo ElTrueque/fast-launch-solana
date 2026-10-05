@@ -1,0 +1,20 @@
+{
+  "scope": "offline clean rebuild; no network reads or transaction submission",
+  "at": "2026-10-05T09:30:18.950Z",
+  "command": [
+    "cargo",
+    "build",
+    "--offline",
+    "--release",
+    "--target",
+    "sbpfv3-solana-solana",
+    "--locked"
+  ],
+  "originalSourcePathsRemapped": false,
+  "exitCode": 0,
+  "expectedSHA256": "7db37174011a0a5736cae8558ddc81ae48dfdb0f58ce62ef0dff182064ed659d",
+  "expectedBytes": 87160,
+  "actualSHA256": "6b900c31eecbae0b9387d9a034ff3ad8827995b20e8ebc37ffe8868fe9b05c62",
+  "actualBytes": 87280,
+  "exactMatch": false
+}

@@ -1,0 +1,77 @@
+{
+  "programId": "BtFP1XpKdZgAiivKJQ6pFr1fuHpeNTHhjyskDbSUtHqj",
+  "lookupTable": "6ZibeJUmhEqxsmJuhrnAKbZJVKH8Mn5XWNcSVaVSBBF8",
+  "programData": "22DKa13W514H2Yt9oc54wKtyyxYwQRQmN6Xb4wKYMNfh",
+  "runtimeChecked": true,
+  "programSHA256": "7db37174011a0a5736cae8558ddc81ae48dfdb0f58ce62ef0dff182064ed659d",
+  "settingsHash": "7046d9586345de4b9f2f89ca2786e0052790536c51d8cc5e34af9053ec05239a",
+  "authority": "8x7MM5maL2vQPpqeiLWBiPKk6VK4BRZ9qG5jqoP9eta1",
+  "jarSigner": "A9tYUrbpwciw4zMjqm8vFCiFUvUxPfQ4PUVEDrA1C4aa",
+  "holderSigner": "CCvTYNFc1BsGd8ooAwEmvmjadhKJYmJQhzRa2xTSiYFr",
+  "verifiedSlot": 453222359,
+  "verifiedAt": "2026-10-04T09:56:27.363Z",
+  "commitment": "finalized",
+  "quotes": [
+    {
+      "symbol": "SOL",
+      "mint": "So11111111111111111111111111111111111111112",
+      "minSqrt": "1677843612660283914",
+      "maxSqrt": "16778436126734665222"
+    },
+    {
+      "symbol": "USDC",
+      "mint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+      "minSqrt": "583337266871351588",
+      "maxSqrt": "5833372668713515884"
+    },
+    {
+      "symbol": "TSLAx",
+      "mint": "XsDoVfqeBukxuZHWhdvWHBhgEHjGNst4MLodqsJHzoB",
+      "minSqrt": "302735322081475995",
+      "maxSqrt": "3027353223624824903"
+    },
+    {
+      "symbol": "AAPLx",
+      "mint": "XsbEhLAtcf6HdfpFZ5xEMdqW8nfAvcsP5bdudRLJzJp",
+      "minSqrt": "319016328023465441",
+      "maxSqrt": "3190163284447966490"
+    },
+    {
+      "symbol": "SPYx",
+      "mint": "XsoCS1TfEyfFhfvj8EtZ528L3CaKBDBRqRapnBbDF2W",
+      "minSqrt": "209499663511677925",
+      "maxSqrt": "2094996640151991814"
+    },
+    {
+      "symbol": "QQQx",
+      "mint": "Xs8S1uUs1zvS2p7iwtsG3b6fkhpvmwz4GYU3gWAmWHZ",
+      "minSqrt": "212477517797283933",
+      "maxSqrt": "2124775181976584887"
+    },
+    {
+      "symbol": "AMZNx",
+      "mint": "Xs3eBt7uRfJX8QUs4suhyU8p2M6DoUDrJyWBa8LLZsg",
+      "minSqrt": "367972053982592147",
+      "maxSqrt": "3679720543432448700"
+    },
+    {
+      "symbol": "NVDAx",
+      "mint": "Xsc9qvGR1efVDFGLrVsmkzv3qi45LTBjeUKSPmx9qEh",
+      "minSqrt": "380471244845931253",
+      "maxSqrt": "3804712449711431641"
+    },
+    {
+      "symbol": "GOOGLx",
+      "mint": "XsCPL9dNWBMvFtTmwcCA5v3xWPSMEBCszbQdiLLq6aN",
+      "minSqrt": "314205144638587687",
+      "maxSqrt": "3142051451530099585"
+    },
+    {
+      "symbol": "METAx",
+      "mint": "Xsa62P5mvPszXL1krVUnU5ar38bBSVcWAB6fmPCo5Zu",
+      "minSqrt": "216015284533612545",
+      "maxSqrt": "2160152849274300098"
+    }
+  ],
+  "tableAddresses": 39
+}

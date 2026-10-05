@@ -1,0 +1,2 @@
+# Preserve original bytes (including Windows source line endings) in every clone.
+* -text
