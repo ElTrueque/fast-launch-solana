@@ -1,0 +1,26 @@
+# Candidate: build on Ubuntu 24.04, pin BASE_IMAGE to the resolved OCI digest.
+# The final published image is identified by its immutable digest.
+ARG BASE_IMAGE
+FROM ${BASE_IMAGE}
+USER root
+SHELL ["/bin/bash", "-euo", "pipefail", "-c"]
+RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates curl bzip2 libssl3t64 libudev1 libstdc++6 libatomic1 libtinfo6 libzstd1 libxml2 zlib1g && rm -rf /var/lib/apt/lists/*
+COPY container-inputs/node /usr/local/bin/node
+COPY container-inputs/rustup /usr/local/bin/rustup
+COPY reproduce-linux.mjs /opt/fast/reproduce-linux.mjs
+COPY cargo-build-sbf.mjs /usr/local/bin/cargo-build-sbf
+RUN mkdir -p /opt/platform /tmp/original-target && \
+    curl --fail --location --retry 3 --max-time 600 https://github.com/anza-xyz/platform-tools/releases/download/v1.57/platform-tools-linux-x86_64.tar.bz2 -o /tmp/linux.tar.bz2 && \
+    echo 'b0f7af104adf726fff2a6a09ea2eb2f2d2965c92295f4d7388c08d140e0c2b00  /tmp/linux.tar.bz2' | sha256sum --check --strict && \
+    tar -xjf /tmp/linux.tar.bz2 -C /opt/platform && \
+    curl --fail --location --retry 3 --max-time 600 https://github.com/anza-xyz/platform-tools/releases/download/v1.57/platform-tools-windows-x86_64.tar.bz2 -o /tmp/windows.tar.bz2 && \
+    echo '792bc821f006e2b56aee31640110b449d5dc89f1305f16f24037465ab8cd7d5a  /tmp/windows.tar.bz2' | sha256sum --check --strict && \
+    tar -xjf /tmp/windows.tar.bz2 -C /tmp/original-target './rust/lib/rustlib/sbpfv3-solana-solana' && \
+    rm -rf /opt/platform/rust/lib/rustlib/sbpfv3-solana-solana && \
+    cp -a /tmp/original-target/rust/lib/rustlib/sbpfv3-solana-solana /opt/platform/rust/lib/rustlib/ && \
+    rm -rf /tmp/original-target /tmp/linux.tar.bz2 /tmp/windows.tar.bz2 && \
+    chmod +x /usr/local/bin/node /usr/local/bin/rustup /usr/local/bin/cargo-build-sbf && \
+    rustup toolchain link fast-sbf /opt/platform/rust && rustup default fast-sbf
+ENV PATH="/opt/platform/rust/bin:/opt/platform/llvm/bin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+WORKDIR /work/src
+CMD ["bash"]
