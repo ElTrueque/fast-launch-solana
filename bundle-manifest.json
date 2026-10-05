@@ -4,11 +4,49 @@
   "sourceArchive": "source-package.zip",
   "sourceArchiveBytes": 177764,
   "sourceArchiveSHA256": "504f257952c4d0d1bb7901ae06c8c9270ada5aeb150319310d4604b7df885acd",
+  "sourcePublicationCommit": "ab28ca58d68c5463230a00f1fed2d020b5f900bc",
   "programId": "BtFP1XpKdZgAiivKJQ6pFr1fuHpeNTHhjyskDbSUtHqj",
   "programData": "22DKa13W514H2Yt9oc54wKtyyxYwQRQmN6Xb4wKYMNfh",
   "expectedProgramSHA256": "7db37174011a0a5736cae8558ddc81ae48dfdb0f58ce62ef0dff182064ed659d",
   "expectedProgramBytes": 87160,
   "windowsCleanBuildExactMatch": true,
-  "githubRunConfirmed": false,
-  "otterSecVerificationConfirmed": false
+  "githubRunConfirmed": true,
+  "githubWindowsVerification": {
+    "runId": "37292117758",
+    "url": "https://github.com/ElTrueque/fast-launch-solana/actions/runs/37292117758",
+    "commit": "f7f579b9ebdac635a76b063d691164488531071b",
+    "conclusion": "success",
+    "date": "2026-10-05",
+    "wholeELFExactMatch": true,
+    "finalizedMainnetAccountCheckPassed": true,
+    "artifactId": "11336642240",
+    "artifactURL": "https://github.com/ElTrueque/fast-launch-solana/actions/runs/37292117758/artifacts/11336642240"
+  },
+  "linuxExactMatchConfirmed": true,
+  "githubLinuxVerification": {
+    "runId": "37294234159",
+    "url": "https://github.com/ElTrueque/fast-launch-solana/actions/runs/37294234159",
+    "commit": "295d014b5b1ba128799cfd3bf75d21bee3628f18",
+    "conclusion": "success",
+    "date": "2026-10-05",
+    "wholeELFExactMatch": true,
+    "finalizedMainnetAccountCheckPassed": true,
+    "hostTools": "Anza platform-tools v1.57 Linux x86_64",
+    "targetLibraries": "Original Anza platform-tools v1.57 Windows sbpfv3-solana-solana libraries",
+    "targetLibraryFilesSHA256Checked": 50,
+    "elfPatchedAfterCompilation": false
+  },
+  "otterSecVerificationConfirmed": false,
+  "githubContainerVerification": {
+    "runId": "37295679162",
+    "url": "https://github.com/ElTrueque/fast-launch-solana/actions/runs/37295679162",
+    "commit": "ae52f73dcf854cc1e7c7e2c1ffa2ae714ad0ccc4",
+    "conclusion": "success",
+    "wholeELFExactMatch": true,
+    "finalizedMainnetAccountCheckPassed": true,
+    "officialCLI": "0.5.1",
+    "publicImage": "ghcr.io/eltrueque/fast-launch-solana-builder@sha256:9a2afd0a1a847179919bf0ab484f54cda08bf537d88bf18d9ea8204feaf38a8f",
+    "artifactId": "11339120649",
+    "elfPatchedAfterCompilation": false
+  }
 }
