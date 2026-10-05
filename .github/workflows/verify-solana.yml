@@ -1,0 +1,73 @@
+name: Reproduce Fast Solana and check mainnet
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: fast-solana-source-reproduction
+  cancel-in-progress: false
+
+jobs:
+  reproduce:
+    runs-on: windows-latest
+    timeout-minutes: 25
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - name: Check out the public source package
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - name: Validate source archive before extraction
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $expected = '504f257952c4d0d1bb7901ae06c8c9270ada5aeb150319310d4604b7df885acd'
+          $bundle = Get-Content bundle-manifest.json -Raw | ConvertFrom-Json
+          $actual = (Get-FileHash -LiteralPath source-package.zip -Algorithm SHA256).Hash.ToLowerInvariant()
+          if ($actual -ne $expected -or $bundle.sourceArchiveSHA256 -ne $expected) { throw 'Source archive digest mismatch' }
+          if ((Get-Item -LiteralPath source-package.zip).Length -ne 177764) { throw 'Source archive length mismatch' }
+          Expand-Archive -LiteralPath source-package.zip -DestinationPath source
+      - name: Download and validate the original toolchain
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $archive = Join-Path $env:RUNNER_TEMP 'platform-tools-v1.57.tar.bz2'
+          Invoke-WebRequest -Uri 'https://github.com/anza-xyz/platform-tools/releases/download/v1.57/platform-tools-windows-x86_64.tar.bz2' -OutFile $archive -TimeoutSec 600
+          $actual = (Get-FileHash -LiteralPath $archive -Algorithm SHA256).Hash.ToLowerInvariant()
+          if ($actual -ne '792bc821f006e2b56aee31640110b449d5dc89f1305f16f24037465ab8cd7d5a') { throw 'Toolchain archive digest mismatch' }
+          $platform = Join-Path $env:RUNNER_TEMP 'fast-solana-platform-v1.57'
+          New-Item -ItemType Directory -Path $platform | Out-Null
+          tar -xf $archive -C $platform
+          if ($LASTEXITCODE -ne 0) { throw 'Toolchain extraction failed' }
+          "FAST_SOLANA_PLATFORM=$platform" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+      - name: Check account validation offline
+        run: node source/scripts/check-mainnet.mjs --self-test
+      - name: Rebuild exact deployed ELF offline
+        run: node source/scripts/reproduce-windows.mjs "$env:FAST_SOLANA_PLATFORM" --original-paths
+      - name: Compare with finalized Solana mainnet
+        env:
+          SOLANA_RPC_URL: ${{ secrets.SOLANA_RPC_URL }}
+        run: node source/scripts/check-mainnet.mjs
+      - name: Preserve reproducibility evidence
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: fast-solana-verification-${{ github.sha }}
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 90
+          path: |
+            bundle-manifest.json
+            source/manifest.json
+            source/evidence/runtime-finalized.json
+            source/.repro/*/result.json
+            source/.repro/*/build.log
+            source/.repro/*/el_trueque_fast_solana.so
