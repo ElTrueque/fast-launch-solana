@@ -23,7 +23,7 @@ export function validateReceipt(result){
 export function validateRemoteJob(job,doc){
  const state=String(job?.status||'').toLowerCase().replace(/[_\s-]/g,'');
  if(state==='completed'){
-  assert.equal(job.repo_url,doc.repository,'Remote job repository differs');
+  assert(job.repo_url===doc.repository||job.repo_url===doc.repository+'/tree/'+PIN.sourceCommit,'Remote job repository differs');
   assert.equal(job.executable_hash,PIN.normalizedProgramSHA256,'Remote executable hash differs');
   assert.equal(job.on_chain_hash,PIN.normalizedProgramSHA256,'Remote on-chain hash differs');
   if(job.commit_hash!==undefined)assert.equal(job.commit_hash,PIN.sourceCommit);
@@ -108,6 +108,8 @@ async function selfTest(doc){
  await test(()=>assert.throws(()=>validateReceipt({value:[null]})));
  const job={status:'completed',repo_url:doc.repository,executable_hash:PIN.normalizedProgramSHA256,on_chain_hash:PIN.normalizedProgramSHA256};
  await test(()=>assert.equal(validateRemoteJob(job,doc).remoteJobVerified,true));
+ await test(()=>assert.equal(validateRemoteJob({...job,repo_url:doc.repository+'/tree/'+PIN.sourceCommit},doc).remoteJobVerified,true));
+ for(const repo_url of [doc.repository+'/tree/'+'0'.repeat(40),doc.repository+'/tree/'+PIN.sourceCommit+'?ref=other',doc.repository+'?ref='+PIN.sourceCommit,doc.repository+'/tree/'+PIN.sourceCommit+'#other',doc.repository+'/tree/'+PIN.sourceCommit+'/',doc.repository.replace('ElTrueque','Foreign')+'/tree/'+PIN.sourceCommit])await test(()=>assert.throws(()=>validateRemoteJob({...job,repo_url},doc)));
  for(const change of [{repo_url:'wrong'},{executable_hash:doc.programSHA256},{on_chain_hash:'0'.repeat(64)},{commit_hash:'0'.repeat(40)}])await test(()=>assert.throws(()=>validateRemoteJob({...job,...change},doc)));
  await test(()=>assert.equal(validateRemoteJob({status:'in_progress'},doc).terminal,false));
  await test(()=>assert.deepEqual(validateRemoteJob({status:'failed'},doc),{terminal:true,remoteJobVerified:false}));
