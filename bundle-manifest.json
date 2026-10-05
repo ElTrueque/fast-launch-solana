@@ -36,7 +36,34 @@
     "targetLibraryFilesSHA256Checked": 50,
     "elfPatchedAfterCompilation": false
   },
-  "otterSecVerificationConfirmed": false,
+  "otterSecVerificationConfirmed": true,
+  "otterSecRemoteVerification": {
+    "confirmedAt": "2026-10-05T11:04:38.240Z",
+    "jobId": "39138bbc-e4ab-4974-b6ae-2774cd3856a7",
+    "jobURL": "https://verify.osec.io/job/39138bbc-e4ab-4974-b6ae-2774cd3856a7",
+    "jobStatus": "completed",
+    "remoteJobVerified": true,
+    "statusURL": "https://verify.osec.io/status/BtFP1XpKdZgAiivKJQ6pFr1fuHpeNTHhjyskDbSUtHqj",
+    "statusAllURL": "https://verify.osec.io/status-all/BtFP1XpKdZgAiivKJQ6pFr1fuHpeNTHhjyskDbSUtHqj",
+    "isVerified": true,
+    "authorityStatusIsVerified": true,
+    "authority": "8x7MM5maL2vQPpqeiLWBiPKk6VK4BRZ9qG5jqoP9eta1",
+    "sourceCommit": "ae52f73dcf854cc1e7c7e2c1ffa2ae714ad0ccc4",
+    "verifiedRepositoryURL": "https://github.com/ElTrueque/fast-launch-solana/tree/ae52f73dcf854cc1e7c7e2c1ffa2ae714ad0ccc4",
+    "normalizedOnChainSHA256": "d05bae619e04ee166de5a6b7ba6d58c6b85efb988291f8ad67e5f245ca5e4c1b",
+    "normalizedExecutableSHA256": "d05bae619e04ee166de5a6b7ba6d58c6b85efb988291f8ad67e5f245ca5e4c1b",
+    "normalization": "solana-verify hashes after removing trailing zero bytes; expectedProgramSHA256 separately covers the complete original ELF",
+    "finalizedMainnetSnapshotSlot": 453560476,
+    "statusOnlyRunId": "37300589215",
+    "statusOnlyRunURL": "https://github.com/ElTrueque/fast-launch-solana/actions/runs/37300589215",
+    "statusOnlyCommit": "915981248bebbd15e2525067c3b1535a05ae4a43",
+    "statusOnlyConclusion": "success",
+    "statusOnlyChainTransactionsSubmitted": false,
+    "statusOnlyRemotePostAttempts": 0,
+    "artifactId": "11341347185",
+    "artifactURL": "https://github.com/ElTrueque/fast-launch-solana/actions/runs/37300589215/artifacts/11341347185",
+    "summaryFile": "remote-verification-summary.json"
+  },
   "githubContainerVerification": {
     "runId": "37295679162",
     "url": "https://github.com/ElTrueque/fast-launch-solana/actions/runs/37295679162",
@@ -48,5 +75,17 @@
     "publicImage": "ghcr.io/eltrueque/fast-launch-solana-builder@sha256:9a2afd0a1a847179919bf0ab484f54cda08bf537d88bf18d9ea8204feaf38a8f",
     "artifactId": "11339120649",
     "elfPatchedAfterCompilation": false
+  },
+  "onChainVerificationMetadata": {
+    "program": "verifycLy8mB96wd9wqq3WDXQwM4oU6r42Th37Db9fC",
+    "pda": "DCULQHBJbx3PssnPFYTcqZmKJcezmou2yMqhcH9D5VyW",
+    "authority": "8x7MM5maL2vQPpqeiLWBiPKk6VK4BRZ9qG5jqoP9eta1",
+    "signature": "52DgKepzJxyxe2ky7dtGnma85Tmqa7E7b9XjVd945wUMNPNSyZBwNFZVCvUPz1rKbuQBfSVu83kEFGaRChHQnDFx",
+    "finalizedSlot": 453557597,
+    "sourceCommit": "ae52f73dcf854cc1e7c7e2c1ffa2ae714ad0ccc4",
+    "metadataSHA256": "82ef3e996cc3f6faac73eeb1a0efbdf9f4a3450a75a3b3d626d1079046bd5588",
+    "rentLamports": 2931160,
+    "feeLamports": 25300,
+    "totalDebitLamports": 2956460
   }
 }

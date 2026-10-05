@@ -1,0 +1,40 @@
+{
+  "format": "fast-solana-public-verification-summary-v1",
+  "confirmedAt": "2026-10-05T11:04:38.240Z",
+  "network": "solana-mainnet-beta",
+  "program": "BtFP1XpKdZgAiivKJQ6pFr1fuHpeNTHhjyskDbSUtHqj",
+  "authority": "8x7MM5maL2vQPpqeiLWBiPKk6VK4BRZ9qG5jqoP9eta1",
+  "sourceCommit": "ae52f73dcf854cc1e7c7e2c1ffa2ae714ad0ccc4",
+  "verifiedRepositoryURL": "https://github.com/ElTrueque/fast-launch-solana/tree/ae52f73dcf854cc1e7c7e2c1ffa2ae714ad0ccc4",
+  "publicImage": "ghcr.io/eltrueque/fast-launch-solana-builder@sha256:9a2afd0a1a847179919bf0ab484f54cda08bf537d88bf18d9ea8204feaf38a8f",
+  "wholeELFSHA256": "7db37174011a0a5736cae8558ddc81ae48dfdb0f58ce62ef0dff182064ed659d",
+  "normalizedExecutableSHA256": "d05bae619e04ee166de5a6b7ba6d58c6b85efb988291f8ad67e5f245ca5e4c1b",
+  "normalizedOnChainSHA256": "d05bae619e04ee166de5a6b7ba6d58c6b85efb988291f8ad67e5f245ca5e4c1b",
+  "normalization": "solana-verify removes trailing zero bytes before hashing; the complete ELF is independently compared without alteration",
+  "jobId": "39138bbc-e4ab-4974-b6ae-2774cd3856a7",
+  "jobURL": "https://verify.osec.io/job/39138bbc-e4ab-4974-b6ae-2774cd3856a7",
+  "jobStatus": "completed",
+  "remoteJobVerified": true,
+  "statusURL": "https://verify.osec.io/status/BtFP1XpKdZgAiivKJQ6pFr1fuHpeNTHhjyskDbSUtHqj",
+  "isVerified": true,
+  "statusAllURL": "https://verify.osec.io/status-all/BtFP1XpKdZgAiivKJQ6pFr1fuHpeNTHhjyskDbSUtHqj",
+  "authorityStatusIsVerified": true,
+  "metadata": {
+    "pda": "DCULQHBJbx3PssnPFYTcqZmKJcezmou2yMqhcH9D5VyW",
+    "accountSHA256": "82ef3e996cc3f6faac73eeb1a0efbdf9f4a3450a75a3b3d626d1079046bd5588",
+    "signature": "52DgKepzJxyxe2ky7dtGnma85Tmqa7E7b9XjVd945wUMNPNSyZBwNFZVCvUPz1rKbuQBfSVu83kEFGaRChHQnDFx",
+    "finalizedSlot": 453557597,
+    "finalizedMainnetSnapshotSlot": 453560476
+  },
+  "statusOnlyEvidence": {
+    "runURL": "https://github.com/ElTrueque/fast-launch-solana/actions/runs/37300589215",
+    "commit": "915981248bebbd15e2525067c3b1535a05ae4a43",
+    "conclusion": "success",
+    "artifactURL": "https://github.com/ElTrueque/fast-launch-solana/actions/runs/37300589215/artifacts/11341347185",
+    "chainTransactionsSubmitted": false,
+    "remotePostAttempts": 0
+  },
+  "remoteBuildLogsHTTPStatus": 404,
+  "remoteBuildLogsNote": "The logs endpoint returned 404; the job and both public verification status endpoints returned successful verified results preserved in the artifact.",
+  "scope": "Public source verification and exact build reproduction completed. Functional launch, payment and transfer transactions are outside this evidence."
+}
