@@ -1,0 +1,56 @@
+name: Probe exact Fast Solana reproduction on Linux
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - name: Validate source archive before extracting
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo '504f257952c4d0d1bb7901ae06c8c9270ada5aeb150319310d4604b7df885acd  source-package.zip' | sha256sum --check --strict
+          unzip -q source-package.zip -d source
+      - name: Download pinned Linux compiler
+        shell: bash
+        run: |
+          set -euo pipefail
+          archive="$RUNNER_TEMP/platform-tools-linux-v1.57.tar.bz2"
+          curl --fail --location --retry 3 --max-time 600 'https://github.com/anza-xyz/platform-tools/releases/download/v1.57/platform-tools-linux-x86_64.tar.bz2' --output "$archive"
+          echo "b0f7af104adf726fff2a6a09ea2eb2f2d2965c92295f4d7388c08d140e0c2b00  $archive" | sha256sum --check --strict
+          mkdir "$RUNNER_TEMP/fast-solana-linux-platform"
+          tar -xjf "$archive" -C "$RUNNER_TEMP/fast-solana-linux-platform"
+      - name: Compile unchanged sources and require exact ELF equality
+        shell: bash
+        run: node reproduce-linux.mjs source "$RUNNER_TEMP/fast-solana-linux-platform"
+      - name: Check current mainnet only after exact build match
+        env:
+          SOLANA_RPC_URL: ${{ secrets.SOLANA_RPC_URL }}
+        run: node source/scripts/check-mainnet.mjs
+      - name: Save results including a mismatch
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: fast-solana-linux-probe-${{ github.sha }}
+          include-hidden-files: true
+          retention-days: 90
+          if-no-files-found: warn
+          path: |
+            source/.repro/linux-*/result.json
+            source/.repro/linux-*/build.log
+            source/.repro/linux-*/path-remap-rules.json
+            source/.repro/linux-*/el_trueque_fast_solana.so
+            source/evidence/runtime-finalized.json
