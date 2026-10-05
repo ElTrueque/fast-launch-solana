@@ -1,0 +1,92 @@
+name: Build and prove Otter-compatible Solana image
+on:
+  workflow_dispatch:
+    inputs:
+      publish_image:
+        description: 'Publish the image to GHCR only after exact build and mainnet checks pass'
+        type: boolean
+        default: false
+permissions:
+  contents: read
+  packages: write
+jobs:
+  image:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - name: Validate published expanded sources and adapter
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f source/program/Cargo.toml
+          node reproduce-linux.mjs source unused --inspect > "$RUNNER_TEMP/source-integrity.json"
+          node cargo-build-sbf.mjs --self-test
+          mkdir container-inputs container-evidence
+          cp -L "$(command -v node)" container-inputs/node
+          cp -L "$(command -v rustup)" container-inputs/rustup
+          sha256sum container-inputs/* > container-evidence/utility-binaries.sha256
+          docker pull ubuntu:24.04
+          docker inspect --format '{{index .RepoDigests 0}}' ubuntu:24.04 > container-evidence/base-image.txt
+      - name: Build candidate image from pinned compiler archives
+        shell: bash
+        run: |
+          set -euo pipefail
+          base="$(cat container-evidence/base-image.txt)"
+          [[ "$base" =~ ^ubuntu@sha256:[a-f0-9]{64}$ ]]
+          docker build --platform linux/amd64 --build-arg "BASE_IMAGE=$base" --label org.opencontainers.image.source=https://github.com/ElTrueque/fast-launch-solana --label "org.opencontainers.image.revision=$GITHUB_SHA" --file Dockerfile.otter --tag fast-solana-builder:local .
+          docker inspect fast-solana-builder:local > container-evidence/image-inspect.json
+      - name: Install official pinned verification CLI
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --location --retry 3 --max-time 180 https://github.com/solana-foundation/solana-verifiable-build/releases/download/v0.5.1/solana-verify-0.5.1-linux -o "$RUNNER_TEMP/solana-verify"
+          echo "b101230b26d5f75d17d931e5056d1a6253904f65649abe7bedb7b81dd38df114  $RUNNER_TEMP/solana-verify" | sha256sum --check --strict
+          chmod +x "$RUNNER_TEMP/solana-verify"
+      - name: Prove the image through the official build command
+        shell: bash
+        run: |
+          set -euo pipefail
+          "$RUNNER_TEMP/solana-verify" build "$PWD/source" --workspace-path "$PWD/source/program" --library-name el_trueque_fast_solana --base-image fast-solana-builder:local --arch v3 2>&1 | tee container-evidence/solana-verify-build.log
+          test "$(stat -c '%s' source/program/target/deploy/el_trueque_fast_solana.so)" = 87160
+          echo '7db37174011a0a5736cae8558ddc81ae48dfdb0f58ce62ef0dff182064ed659d  source/program/target/deploy/el_trueque_fast_solana.so' | sha256sum --check --strict
+          "$RUNNER_TEMP/solana-verify" get-executable-hash source/program/target/deploy/el_trueque_fast_solana.so | tee container-evidence/normalized-hash.txt
+          grep -qx d05bae619e04ee166de5a6b7ba6d58c6b85efb988291f8ad67e5f245ca5e4c1b container-evidence/normalized-hash.txt
+      - name: Check finalized mainnet after container equality
+        env:
+          SOLANA_RPC_URL: ${{ secrets.SOLANA_RPC_URL }}
+        run: node source/scripts/check-mainnet.mjs
+      - name: Publish successful image
+        if: ${{ inputs.publish_image }}
+        env:
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          image="ghcr.io/eltrueque/fast-launch-solana-builder:$GITHUB_SHA"
+          printf '%s' "$GHCR_TOKEN" | docker login ghcr.io --username "$GITHUB_ACTOR" --password-stdin
+          docker tag fast-solana-builder:local "$image"
+          docker push "$image"
+          docker inspect --format '{{range .RepoDigests}}{{println .}}{{end}}' "$image" | grep '^ghcr.io/eltrueque/fast-launch-solana-builder@sha256:' > container-evidence/published-image-digest.txt
+          docker logout ghcr.io
+      - name: Save build proof and image coordinates
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: fast-solana-otter-image-${{ github.sha }}
+          include-hidden-files: true
+          retention-days: 90
+          if-no-files-found: warn
+          path: |
+            container-evidence/
+            source/.repro/linux-*/result.json
+            source/.repro/linux-*/build.log
+            source/program/target/deploy/
+            source/evidence/runtime-finalized.json

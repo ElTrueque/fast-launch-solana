@@ -1,0 +1,34 @@
+name: Publish expanded frozen Solana sources
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  expand:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - name: Validate and expand the exact published archive
+        shell: bash
+        run: |
+          set -euo pipefail
+          test ! -e source
+          echo '504f257952c4d0d1bb7901ae06c8c9270ada5aeb150319310d4604b7df885acd  source-package.zip' | sha256sum --check --strict
+          unzip -q source-package.zip -d source
+          node reproduce-linux.mjs source unused --inspect > "$RUNNER_TEMP/expanded-source-integrity.json"
+      - name: Commit only the expanded archive contents
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -- source
+          git commit -m 'Publish expanded frozen Solana source archive for independent verification'
+          git push origin HEAD:main
+          git rev-parse HEAD
